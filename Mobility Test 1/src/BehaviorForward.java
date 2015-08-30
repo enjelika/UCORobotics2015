@@ -29,7 +29,7 @@ public class BehaviorForward implements Behavior {
 	}
 	
 	public void action(){
-		if(!robot.isMoving()) robot.backward();
+		if(!robot.isMoving()) robot.forward(); //robot.backward();
 		Delay.msDelay(200);
 	}
 }

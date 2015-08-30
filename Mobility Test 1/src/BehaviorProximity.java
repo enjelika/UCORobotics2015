@@ -1,4 +1,4 @@
-import java.io.File;
+//import java.io.File;
 import lejos.nxt.*;
 import lejos.robotics.subsumption.*;
 import lejos.util.Delay;
@@ -6,7 +6,6 @@ import lejos.robotics.navigation.*;
 
 public class BehaviorProximity implements Behavior {
 
-	File myFile = new File("gotcha.wav");
 	UltrasonicSensor us;
 	RotateMoveController robot;
 	
@@ -25,12 +24,13 @@ public class BehaviorProximity implements Behavior {
 	}
 	
 	public void action(){ 
-		System.out.println("Gotcha!");
-		Sound.playSample(myFile, 100);
+		Sound.beep();
+		Sound.beep();
+		System.out.println("Object detected!");
 		robot.stop();
 		Delay.msDelay(500);
-		robot.travel(10);
+		robot.travel(-10); //back up from obstacle
 		//90 degree turn adjusted due to friction of balance tire & front tires
-		robot.rotate(165); 
+		robot.rotate(135); 
 	}
 }
