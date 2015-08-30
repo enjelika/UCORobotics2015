@@ -31,6 +31,6 @@ public class BehaviorProximity implements Behavior {
 		Delay.msDelay(500);
 		robot.travel(-10); //back up from obstacle
 		//90 degree turn adjusted due to friction of balance tire & front tires
-		robot.rotate(135); 
+		robot.rotate(90); 
 	}
 }

@@ -11,7 +11,7 @@ public class BehaviorMain {
 				new UltrasonicSensor(SensorPort.S1);
 		
 		DifferentialPilot robot = 
-				new DifferentialPilot(5.6F, 13.0F, Motor.B, Motor.C, true);
+				new DifferentialPilot(4.32F, 12.75F, Motor.B, Motor.C, true);
 		// ------------------------------------------------
 		
 		robot.setTravelSpeed(25);
