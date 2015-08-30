@@ -25,12 +25,10 @@ public class BehaviorProximity implements Behavior {
 	
 	public void action(){ 
 		Sound.beep();
-		Sound.beep();
 		System.out.println("Object detected!");
 		robot.stop();
 		Delay.msDelay(500);
 		robot.travel(-10); //back up from obstacle
-		//90 degree turn adjusted due to friction of balance tire & front tires
-		robot.rotate(90); 
+		robot.rotate(90); //turn 90 degrees to the left
 	}
 }
