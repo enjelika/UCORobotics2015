@@ -57,7 +57,7 @@ public class BehaviorMain {
 		Sound.twoBeeps();
 		
 		//Wait for a Bluetooth connection
-		btc = Bluetooth.waitForConnection(); //**programs gets hung up here waiting for a connection**
+		btc = Bluetooth.waitForConnection();
 		LCD.drawString("btc.available() = " + btc.available(), 0, 0);
 		LCD.refresh();
 		
