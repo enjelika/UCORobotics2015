@@ -9,10 +9,10 @@ public class BehaviorMain {
 
 	public static void main (String[] args) throws Exception {
 
-		//  The following int arrays are used to hold the commands 
-		//  sent by the PC to the NXT brick
-		int[] command = new int[3];
-		int[] reply = new int[8];
+//		//  The following int arrays are used to hold the commands 
+//		//  sent by the PC to the NXT brick
+//		int[] command = new int[3];
+//		int[] reply = new int[8];
 		
 		//This flag is used to indicate if the while loop is to keep looping
 		boolean keepItRunning = true;
