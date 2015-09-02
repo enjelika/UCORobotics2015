@@ -30,6 +30,5 @@ public class BehaviorCollision implements Behavior {
 	public void action() {
 		Sound.twoBeeps();
 		robot.travel(-25);
-		robot.rotate(-135);
 	}
 }
