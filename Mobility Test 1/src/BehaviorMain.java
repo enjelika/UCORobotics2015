@@ -59,6 +59,7 @@ public class BehaviorMain {
 		//Wait for a Bluetooth connection
 		btc = Bluetooth.waitForConnection();
 		LCD.drawString("btc.available() = " + btc.available(), 0, 0);
+		System.out.println("btc.available() = " + btc.available());
 		LCD.refresh();
 		
 		//Set-up the I/O streams
@@ -68,7 +69,7 @@ public class BehaviorMain {
 		
 		//The while loop for PC control while Bluetooth connected
 		while(keepItRunning){			
-			if(btc.available() != 0){
+			//if(btc.available() > 0){
 				/*  Creates the Arbitrator and the final line
 				 *  starts the Arbitrator process.
 				 * */
@@ -79,13 +80,20 @@ public class BehaviorMain {
 				LCD.clear();
 				LCD.drawString(connected, 0, 0);
 				Thread.sleep(100);
-			} else {
-				Sound.beep();
+				
+				Byte n = -1;
+				n = dis.readByte();
 				LCD.clear();
-				LCD.drawString(notConnected, 0, 0);
-				Thread.sleep(100);
-				keepItRunning = false;
-			}
+				System.out.println("Byte received = " + n);
+			
+				
+//			} else {
+//				Sound.beep();
+//				LCD.clear();
+//				LCD.drawString(notConnected, 0, 0);
+//				Thread.sleep(100);
+//				keepItRunning = false;
+//			}
 		}
 		
 		//Close the I/O Streams & the Bluetooth Connection
