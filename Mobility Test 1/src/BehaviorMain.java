@@ -2,27 +2,21 @@ import lejos.robotics.subsumption.*;
 import lejos.robotics.navigation.*;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
+//import lejos.nxt.remote.ErrorMessages;
 
 import java.io.*;
 
-public class BehaviorMain {
-
+public class BehaviorMain extends LCPBTResponder{
+	
+	//Status messages on the LCD screen
+	public static String connected = "Connected";
+	public static String notConnected = "Not Connected";
+	public static String waiting = "Waiting...";
+	public static String closing = "Closing...";
+	//public static byte closeConn = 0000;
+	
 	public static void main (String[] args) throws Exception {
 
-//		//  The following int arrays are used to hold the commands 
-//		//  sent by the PC to the NXT brick
-//		int[] command = new int[3];
-//		int[] reply = new int[8];
-		
-		//This flag is used to indicate if the while loop is to keep looping
-		boolean keepItRunning = true;
-		
-		//Status messages on the LCD screen
-		String connected = "Connected";
-		String notConnected = "NOT CONNECTED";
-		String waiting = "Waiting...";
-		String closing = "Closing...";
-		
 		//The various streams used to facilitate communication between the
 		//  PC and the NXT
 		DataInputStream dis = null;
@@ -50,58 +44,70 @@ public class BehaviorMain {
 		Behavior b3 = new BehaviorCollision(robot);
 		Behavior[] bArray = {/*b1,*/b2,b3};
 		
-		// "Waiting..." will be displayed on the NXT's LCD 
-		//   and will sound two beeps
-		LCD.drawString(waiting, 0, 0);
-		LCD.refresh();
-		Sound.twoBeeps();
-		
-		//Wait for a Bluetooth connection
-		btc = Bluetooth.waitForConnection();
-		LCD.drawString("btc.available() = " + btc.available(), 0, 0);
-		System.out.println("btc.available() = " + btc.available());
-		LCD.refresh();
-		
-		//Set-up the I/O streams
-		dis = btc.openDataInputStream();
-		dos = btc.openDataOutputStream();
-		Sound.beepSequenceUp(); //Bluetooth connection was successful!
-		
-		//The while loop for PC control while Bluetooth connected
-		while(keepItRunning){			
-			if(btc.available() == 0){
-				/*  Creates the Arbitrator and the final line
-				 *  starts the Arbitrator process.
-				 * */
-				Arbitrator arby = new Arbitrator(bArray);
-				arby.start();
-				
-				//Display connection
+		//Main loop
+		while(true){
+			// "Waiting..." will be displayed on the NXT's LCD 
+			//   and will sound two beeps
+			LCD.drawString(waiting, 0, 0);
+			LCD.refresh();
+			Sound.twoBeeps();
+			
+			//Wait/Listen for a Bluetooth connection
+			btc = Bluetooth.waitForConnection();
+			btc.setIOMode(NXTConnection.RAW);
+			
+			LCD.drawString("btc.available() = " + btc.available(), 0, 0);
+			LCD.refresh();
+			
+			//Set-up the I/O streams for read/write data
+			dis = btc.openDataInputStream();
+			dos = btc.openDataOutputStream();
+			
+			//Bluetooth connection was successful!
+			Sound.beepSequenceUp(); 
+			
+			//This flag is used to indicate if the while loop is to keep looping
+			boolean keepItRunning = true;
+			
+			//The while loop for read data
+			while(keepItRunning){		
+				//Print out received byte(s) to LCD screen
+				//This number will be a literal number from the Android device
+				Byte n = -1;
+				n = dis.readByte();
 				LCD.clear();
-				LCD.drawString(connected, 0, 0);
-				Thread.sleep(100);
+				System.out.println("Byte received = " + n);
 				
-//				Byte n = -1;
-//				n = dis.readByte();
-//				LCD.clear();
-//				System.out.println("Byte received = " + n);
-			} else {
-				Sound.beep();
-				LCD.clear();
-				LCD.drawString(notConnected, 0, 0);
-				Thread.sleep(100);
-				keepItRunning = false;
+				if(n != 99){
+					/*  Creates the Arbitrator and the final line
+					 *  starts the Arbitrator process.
+					 * */
+					Arbitrator arby = new Arbitrator(bArray);
+					arby.start();
+					
+					//Display connection
+					LCD.clear();
+					LCD.drawString(connected, 0, 0);
+					Thread.sleep(100);
+				} else {
+					Sound.beep();
+					LCD.clear();
+					LCD.drawString(notConnected, 0, 0);
+					Thread.sleep(250);
+					keepItRunning = false;
+				}
 			}
+			
+			//Close the I/O Streams & the Bluetooth Connection
+			dis.close();
+			dos.close();
+			Thread.sleep(100); //wait for data to drain
+			LCD.clear();
+			
+			LCD.drawString(closing, 0, 0);
+			LCD.refresh();
+			btc.close();
+			LCD.clear();
 		}
-		
-		//Close the I/O Streams & the Bluetooth Connection
-		dis.close();
-		dos.close();
-		Thread.sleep(100); //wait for data to drain
-		LCD.clear();
-		LCD.drawString(closing, 0, 0);
-		LCD.refresh();
-		btc.close();
-		LCD.clear();
 	}
 }

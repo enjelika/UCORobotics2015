@@ -1,7 +1,5 @@
-//The enums used for both the PC and NXT
+//Interface used for calling special commands
 
-public enum Command {
-	GOTO,
-	TRAVEL,
-	ROTATE;
+interface Command {
+	public void performCommand(int commNum, byte[] parameter);
 }
