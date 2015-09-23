@@ -24,8 +24,9 @@ public class BehaviorProximity implements Behavior {
 	}
 	
 	public void action(){ 
-		//VIBRATE PHONE?
-		Sound.beep();
+		//send message to Android app
+		//dos.write(69);
+		//Sound.beep();
 		System.out.println("Object detected " + us.getDistance() + " cms!");
 		robot.stop();
 		Delay.msDelay(500);

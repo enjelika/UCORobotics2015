@@ -40,9 +40,9 @@ public class BehaviorMain extends LCPBTResponder{
 		*     Textbook page 279	
 		*/
 		//Behavior b1 = new BehaviorForward(robot);
-		Behavior b2 = new BehaviorProximity(us, robot);
-		Behavior b3 = new BehaviorCollision(robot);
-		Behavior[] bArray = {/*b1,*/b2,b3};
+		//Behavior b2 = new BehaviorProximity(us, robot);
+		//Behavior b3 = new BehaviorCollision(robot);
+		//Behavior[] bArray = {/*b1,*/b2,/*b3*/};
 		
 		//Main loop
 		while(true){
@@ -56,16 +56,19 @@ public class BehaviorMain extends LCPBTResponder{
 			btc = Bluetooth.waitForConnection();
 			btc.setIOMode(NXTConnection.RAW);
 			
-			LCD.drawString("btc.available() = " + btc.available(), 0, 0);
-			LCD.refresh();
-			
 			//Set-up the I/O streams for read/write data
 			dis = btc.openDataInputStream();
 			dos = btc.openDataOutputStream();
 			
 			//Bluetooth connection was successful!
+			LCD.clear();
+			LCD.drawString(connected, 0, 0);
+			LCD.refresh();
 			Sound.beepSequenceUp(); 
-			
+			Thread.sleep(5000);
+			dos.write(69);
+			dos.flush();
+						
 			//This flag is used to indicate if the while loop is to keep looping
 			boolean keepItRunning = true;
 			
@@ -77,22 +80,22 @@ public class BehaviorMain extends LCPBTResponder{
 				n = dis.readByte();
 				LCD.clear();
 				System.out.println("Byte received = " + n);
+				LCD.refresh();
 				
 				if(n != 99){
 					/*  Creates the Arbitrator and the final line
 					 *  starts the Arbitrator process.
 					 * */
-					Arbitrator arby = new Arbitrator(bArray);
-					arby.start();
+//					Arbitrator arby = new Arbitrator(bArray);
+//					arby.start();
 					
 					//Display connection
 					LCD.clear();
 					LCD.drawString(connected, 0, 0);
-					Thread.sleep(100);
+					LCD.refresh();
 				} else {
 					Sound.beep();
 					LCD.clear();
-					LCD.drawString(notConnected, 0, 0);
 					Thread.sleep(250);
 					keepItRunning = false;
 				}
